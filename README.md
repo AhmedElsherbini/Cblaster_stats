@@ -34,7 +34,7 @@ Currently, there are three files.
 
 1. database_percentage_*your_file*.csv (The main output where you can find for each species the count of your species in the binary file , the number of assembled genomes and the percentage of (count/assembly)*100. 
 2. *your_file*_tree.png. This is just a basic tree that links your isolates together.
-3. *your_file*_tree.nwk. If you like to take this tree to another tool (Itol, Figtree,..)
+3. *your_file*_tree.nwk. If you like to take this tree to another tool (iTOL,FigTree,..)
 
 I hope this helps.
 
