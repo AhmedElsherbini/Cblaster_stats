@@ -94,6 +94,6 @@ try:
     # Export the annotated tree as a Newick file
     tree.write(outfile=output_file)
     tree.render("%s_tree.png"%(f_name[:-4]), layout=None, w=None, h=None, tree_style=None, units='px', dpi=90) 
-    print("We are done here!")
+    print("We are done here, check the tree!")
 except:
  print("You may have an error with ete3 installation")
