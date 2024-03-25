@@ -52,6 +52,7 @@ df['%_in_assembly_db'] = df['count']/df['assmebly']*100
 df = df.rename(columns={0: 'Species'})
 file_name = 'database percentage_%s.csv'%(f_name[:-4])
 df.to_csv(file_name,index=False)
+print("Done for the database file")
 
 
 try:
