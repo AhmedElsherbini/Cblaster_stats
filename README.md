@@ -1,5 +1,5 @@
 # Cblaster_stats
-
+**Kindly if you find this repo useful for your work, cite & star this repo**
 **What is this script?**
 
 [Cblaster](https://github.com/gamcil/cblaster) is a great tool for finding co-located homologous sequences using BLAST. Sometimes in the remote mode, you can get the binary (~presnese absence matrix) file with thousands of hits (per isolate) depending on what you are working with. 
