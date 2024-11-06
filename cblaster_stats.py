@@ -9,29 +9,16 @@ Spyder Editor
 import pandas as pd
 from Bio import Entrez
 import ete3
-from ete3 import NCBITaxa
-from ete3 import Tree
-from ete3 import PhyloTree
+from ete3 import NCBITaxa, TreeStyle, PieChartFace, faces
 import argparse
 import warnings
-from Bio import Phylo
+
 ###########################################################
-#/media/ahmed/Elements1/old_projects/20_jens_je2
 warnings.filterwarnings("ignore")
+
 my_parser = argparse.ArgumentParser(description='Hello!')
-my_parser.add_argument('-i','--input',
-                       action='store',
-                       metavar='input',
-                       type=str,
-                       help='the path to your file')
-
-my_parser.add_argument('-ot','--outlier',
-                       action='store',
-                       metavar='outlier',
-                       type=str,
-                       help='the name to your outlier species')
-
-###########################################################
+my_parser.add_argument('-i', '--input', action='store', metavar='input', type=str, help='the path to your file')
+my_parser.add_argument('-ot', '--outlier', action='store', metavar='outlier', type=str, help='the name to your outlier species')
 
 args = my_parser.parse_args()
 f_name = args.input
@@ -39,83 +26,79 @@ ot = args.outlier
 
 #f_name = "example_binary.csv"
 #ot = "deinococcus_radiodurans"
-###########################################################
 try:
     Entrez.email = 'drahmed@gmail.com'
-    df = pd.read_csv(f_name,header=None)
-    #df = pd.read_csv('30_binary.csv',header=None)
+    df = pd.read_csv(f_name, header=None)
     df = df.iloc[:, 0].to_frame()
     df = df[0].str.split().str[:2].str.join(' ').to_frame()
     df = df[0].value_counts().to_frame()
-    df = df.reset_index()		
+    df = df.reset_index()
+    df.columns = ['Species', 'count']
     assmebly = []
+    
     print("This is Cblaster_stats (Ahmed Elsherbini)")
-    for row in df[0]:
-            species_name = str(row)
-            handle = Entrez.esearch(db="assembly", term=str(species_name), retmode="xml")
-            record = Entrez.read(handle)
-            count = int(record['Count'])
-            print(f"Number of {species_name} occurrences in NCBI assembly database: {count}")
-            assmebly.append(count)
     
-    df['assmebly'] = assmebly
+    for row in df['Species']:
+        species_name = str(row)
+        handle = Entrez.esearch(db="assembly", term=species_name, retmode="xml")
+        record = Entrez.read(handle)
+        count = int(record['Count'])
+        print(f"Number of {species_name} occurrences in NCBI assembly database: {count}")
+        assmebly.append(count)
     
-    df['%_in_assembly_db'] = df['count']/df['assmebly']*100
-    df = df.rename(columns={0: 'Species'})
-    file_name = 'database percentage_%s.csv'%(f_name[:-4])
-    df.to_csv(file_name,index=False)
+    df['assembly'] = assmebly
+    df['%_in_assembly_db'] = df['count'] / df['assembly'] * 100
+    file_name = 'database_percentage_%s.csv' % (f_name[:-4])
+    df.to_csv(file_name, index=False)
     print("Done for the database file")
     
-    
-    #try:
+    # Taxonomy retrieval and tree generation
     ncbi = NCBITaxa()
     species_taxids = {}
     species_names = pd.Series(df["Species"])
-    #add the outlier
-    if ot == True:
+    
+    # Add outlier if provided
+    if ot:
         ot = ot.replace("_", " ")
-        species_names.loc[len(species_names)] = str(ot)
+        species_names.loc[len(species_names)] = ot
     
     for species_name in species_names:
-        # Use the ETE Toolkit to search for the taxid of the given species name
         taxid = ncbi.get_name_translator([species_name])
-        # Check if the species name exists in the NCBI Taxonomy database   
-        if taxid:
-            species_taxids[species_name] = taxid[species_name][0]
-        else:
-            species_taxids[species_name] = None
-       
-       
-    taxa_ids = list(species_taxids.values())
-    taxa_ids = [i for i in taxa_ids if i is not None]
+        species_taxids[species_name] = taxid[species_name][0] if taxid else None
+
+    taxa_ids = [taxid for taxid in species_taxids.values() if taxid]
     tree = ncbi.get_topology(taxa_ids)
-    #just to print in Python API
-    #tree = tree.get_ascii(attributes=["sci_name"])
-       
-       
+
     def annotate_tree_with_scientific_names(tree):
         for node in tree.traverse():
             if node.is_leaf():
-                # Get scientific name from taxid
                 taxid = int(node.name)
                 scientific_name = ncbi.get_taxid_translator([taxid]).get(taxid)
-                # Update node name with scientific name
                 node.name = scientific_name if scientific_name else "Unknown"
-    
-       
     
     annotate_tree_with_scientific_names(tree)
     
-    output_file = "%s_tree.nwk"%(f_name[:-4])
-    # Export the annotated tree as a Newick file
-    #the tree
+    output_file = "%s_tree.nwk" % (f_name[:-4])
     tree.write(outfile=output_file)
-    tree.render("%s_tree.pdf"%(f_name[:-4]), layout=None, w=None, h=None, tree_style=None, units='px', dpi=90) 
-
-    print("We are done for free, check the tree!")
-    #here we 
-    df1 = df[['Species', '%_in_assembly_db']]
     
+    # Prepare data for pie charts
+    df1 = df[['Species', '%_in_assembly_db']]
+    pie_data = df1.set_index('Species')['%_in_assembly_db'].to_dict()
+    
+    def layout(node):
+        if node.is_leaf() and node.name in pie_data:
+            pie_values = [pie_data[node.name], 100 - pie_data[node.name]]
+            colors = ["green", "lightgray"]
+            pie_face = PieChartFace(pie_values, colors=colors, width=50, height=50)
+            faces.add_face_to_node(pie_face, node, column=1)
+    
+    ts = TreeStyle()
+    ts.layout_fn = layout
+    ts.show_leaf_name = True
+    ts.title.add_face(faces.TextFace("Phylogenetic Tree with Pie Charts", fsize=12), column=0)
+    
+    tree.render("%s_tree_with_pies.pdf" % (f_name[:-4]), tree_style=ts)
+    print("Tree with pie charts rendered successfully!")
 
-except:
-    print("You may have an error with ete3 installation")
+except Exception as e:
+    print("An error occurred:", e)
