@@ -16,7 +16,7 @@ You shall have the binary file as easy as I get it like this.
 cblaster search --query_file CP018841.1.faa --binary example_binary.csv -bde "," -bhh -bdc 6 -mi 50 -mc 50
 ```
 
- *What about dependencies?*
+ **What about dependencies?**
 
 Pandas, Biopython, ete3, argparse
 
