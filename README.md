@@ -13,14 +13,9 @@ Finally, this script will draw a tree based on the pre-defined NCBI taxonomy amo
 You shall have the binary file as easy as I get it like this.
 
 ```bash
-cblaster search --query_file CP018841.1.faa --binary example_binary.csv -bde "," -bhh -bdc 6 -mi 50 -mc 50
+cblaster search --query_file CP018841.1.faa --binary example_binary.csv -bde "," -bhh -bdc 6 -mi 50 -mc 50 -hs 3000
 ```
-
- **What about dependencies?**
-
-Pandas, Biopython, ete3, argparse
-
-Well, for [ete3](http://etetoolkit.org/download/), I recommend installing it via conda env (even if it takes a lot of time), if the pip does not work properly.
+PS: <code>hs</code> is very useful if you have a lot of results due to low coverage <code>mc</code>, low identity search <code>mi</code>. suggested by the last author in this [issue](https://github.com/gamcil/cblaster/issues/96).
 
 So, type this command effortlessly.
 
@@ -32,6 +27,13 @@ So, type this command effortlessly.
 
 "-ot /--outlier" <**optional**> is an outlier species that I know that it is NOT in my results and phylogenetically far from my results. 
 *PS: do not forget to use underscore _ in the name of this species.* 
+
+ **What about dependencies?**
+
+Pandas, Biopython, ete3, argparse
+
+Well, for [ete3](http://etetoolkit.org/download/), I recommend installing it via conda env (even if it takes a lot of time), if the pip does not work properly.
+
 
 **What do you get?**
 
