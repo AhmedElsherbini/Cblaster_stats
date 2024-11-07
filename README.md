@@ -24,10 +24,14 @@ Well, for [ete3](http://etetoolkit.org/download/), I recommend installing it via
 
 So, type this command effortlessly.
 
+
 ```bash
- python cblaster_stats.py -i  example_binary.csv
+ python cblaster_stats.py -i  example_binary.csv -ot deinococcus_radiodurans
 ```
 "-i /--input_dir"  is your path to the directory for your binary file  
+
+"-ot /--outlier" <**optional**> is an outlier species that I know that it is NOT in my results and phylogenetically far from my results. 
+PS: Do not forget to use underscore _ in the name of this species. 
 
 **What do you get?**
 
