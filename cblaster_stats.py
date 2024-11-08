@@ -28,7 +28,7 @@ ot = args.outlier
 #ot = "deinococcus_radiodurans"
 try:
     Entrez.email = 'drahmed@gmail.com'
-    df = pd.read_csv(f_name, header=None)
+    df = pd.read_csv(f_name, header=None,on_bad_lines='skip')
     df = df.iloc[:, 0].to_frame()
     df = df[0].str.split().str[:2].str.join(' ').to_frame()
     df = df[0].value_counts().to_frame()
