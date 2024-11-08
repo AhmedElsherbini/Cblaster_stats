@@ -21,7 +21,7 @@ So, type this command effortlessly.
 
 
 ```bash
- python cblaster_stats.py -i  example_binary.csv -ot deinococcus_radiodurans
+ python cblaster_stats.py -i  example_binary.csv -og deinococcus_radiodurans
 ```
 "-i /--input_dir"  is your path to the directory for your binary file  
 
