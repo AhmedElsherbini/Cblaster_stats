@@ -18,14 +18,14 @@ warnings.filterwarnings("ignore")
 
 my_parser = argparse.ArgumentParser(description='Hello!')
 my_parser.add_argument('-i', '--input', action='store', metavar='input', type=str, help='the path to your file')
-my_parser.add_argument('-ot', '--outlier', action='store', metavar='outlier', type=str, help='the name to your outlier species')
+my_parser.add_argument('-og', '--outgroup', action='store', metavar='outgroup', type=str, help='the name to your outgroup species')
 
 args = my_parser.parse_args()
 f_name = args.input
-ot = args.outlier
+og = args.outgroup
 
 #f_name = "example_binary.csv"
-#ot = "deinococcus_radiodurans"
+#og = "deinococcus_radiodurans"
 try:
     Entrez.email = 'drahmed@gmail.com'
     df = pd.read_csv(f_name, header=None,on_bad_lines='skip')
@@ -58,9 +58,9 @@ try:
     species_names = pd.Series(df["Species"])
     
     # Add outlier if provided
-    if ot:
-        ot = ot.replace("_", " ")
-        species_names.loc[len(species_names)] = ot
+    if og:
+        og = og.replace("_", " ")
+        species_names.loc[len(species_names)] = og
     
     for species_name in species_names:
         taxid = ncbi.get_name_translator([species_name])
