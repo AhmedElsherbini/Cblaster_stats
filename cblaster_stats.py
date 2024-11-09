@@ -95,7 +95,7 @@ try:
     ts = TreeStyle()
     ts.layout_fn = layout
     ts.show_leaf_name = True
-    ts.title.add_face(faces.TextFace("Phylogenetic Tree with Pie Charts", fsize=12), column=0)
+    #ts.title.add_face(faces.TextFace("Phylogenetic Tree with Pie Charts", fsize=12), column=0)
     
     tree.render("%s_tree_with_pies.pdf" % (f_name[:-4]), tree_style=ts)
     print("Tree with pie charts rendered successfully!")
