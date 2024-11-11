@@ -25,7 +25,7 @@ So, type this command effortlessly.
 ```
 "-i /--input_dir"  is your path to the directory for your binary file  
 
-"-og /--outgroup" <**optional**> is an outlier species that I know that it is NOT in my results and phylogenetically far from my results. 
+"-og /--outgroup" <**optional**> is an outgroup species that I know that it is NOT in my results and phylogenetically far from my results. 
 *PS: do not forget to use underscore _ in the name of this species.* 
 
  **What about dependencies?**
