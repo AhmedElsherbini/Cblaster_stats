@@ -21,9 +21,9 @@ So, type this command effortlessly.
 
 
 ```bash
- python cblaster_stats.py -i  example_binary.csv -og deinococcus_radiodurans
+ python blastcblast_stats.py -i  example_cblaster_binary.csv -og deinococcus_radiodurans
 ```
-"-i /--input_dir"  is your path to the directory for your binary file  
+"-i /--input_dir"  is your path to the directory for your <**BlastN, P ,or Cblaster binary file**>  
 
 "-og /--outgroup" <**optional**> is an outgroup species that I know that it is NOT in my results and phylogenetically far from my results. 
 *PS: do not forget to use underscore _ in the name of this species.* 
