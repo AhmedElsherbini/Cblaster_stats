@@ -1,4 +1,4 @@
-# Cblaster_stats
+# blastCblast_stats
 **Kindly if you find this repo useful for your work, cite & star this repo**
 
 **What is this script?**
