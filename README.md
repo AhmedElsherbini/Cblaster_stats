@@ -3,8 +3,8 @@
 
 **What is this script?**
 
-[Cblaster](https://github.com/gamcil/cblaster) is a great tool for finding co-located homologous sequences using BLAST. Sometimes in the remote mode, you can get the binary (~presnese absence matrix) file with thousands of hits (per isolate) depending on what you are working with. 
-Here, you can break this file into a simple file per species, which will count the number of hits per species. 
+[Blast](https://blast.ncbi.nlm.nih.gov/Blast.cgi) and [Cblaster](https://github.com/gamcil/cblaster) are great tools for finding homologous and co-located homologous respectively. 
+Here, you can break down the long complicated results  into a simple result per species, which will count the number of hits per species.
 Then, it will efetch the number of the assembled genomes per species (via Biopython [Enterez](https://biopython.org/docs/1.75/api/Bio.Entrez.html) based on the NCBI assembly database). Dividing both numbers will hint at the spread of your cluster among different species.
 Finally, this script will draw a tree based on the pre-defined NCBI taxonomy among your species using [ete3 toolkit](http://etetoolkit.org/docs/latest/tutorial/index.html) Finally, merging the results of the database as a pie chart with the tree will give you a nice visualization.
 
