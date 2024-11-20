@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Original author : Ahmed Elsherbini 
-Date 22-03-2024
+Date 20-11-2024
 Spyder Editor
 """
 ###########################################################
@@ -24,19 +24,46 @@ args = my_parser.parse_args()
 f_name = args.input
 og = args.outgroup
 
-#f_name = "example_binary.csv"
+#f_name = "y.csv"
 #og = "deinococcus_radiodurans"
 try:
     Entrez.email = 'drahmed@gmail.com'
     df = pd.read_csv(f_name, header=None,on_bad_lines='skip')
-    df = df.iloc[:, 0].to_frame()
-    df = df[0].str.split().str[:2].str.join(' ').to_frame()
-    df = df[0].value_counts().to_frame()
-    df = df.reset_index()
-    df.columns = ['Species', 'count']
-    assmebly = []
     
-    print("This is Cblaster_stats (Ahmed Elsherbini)")
+    
+    if df[0].iloc[0] == 'Description':
+        df.rename(columns=df.iloc[0], inplace = True)
+        df['Scientific Name'] = df['Scientific Name'].apply(lambda x: ' '.join(str(x).split()[:2]) if isinstance(x, str) else str(x))    
+        df = df['Scientific Name'].value_counts().reset_index()
+        df.columns = ['Species', 'count']
+        substring = 'Scientific Name'
+        filterx = df['Species'].str.contains(substring)
+        df = df[~filterx]
+        substring = 'sp.'
+        filterx = df['Species'].str.contains(substring)
+        substring = 'nan'
+        filterx = df['Species'].str.contains(substring)
+        df = df[~filterx]
+        
+        assmebly = []
+        print("I think this is a NCBI blast input")
+    
+    else:
+        df = df.iloc[:, 0].to_frame()
+        df = df[0].str.split().str[:2].str.join(' ').to_frame()
+        df = df[0].value_counts().to_frame()
+        df = df.reset_index()
+        df.columns = ['Species', 'count']
+        substring = 'sp.'
+        filterx = df['Species'].str.contains(substring)
+        substring = 'nan'
+        filterx = df['Species'].str.contains(substring)
+        df = df[~filterx]
+        assmebly = []
+        print("I think this is a Cblaster input")
+    
+    
+    print("And this is blastCblast_stats (Ahmed Elsherbini)")
     
     for row in df['Species']:
         species_name = str(row)
@@ -65,10 +92,10 @@ try:
     for species_name in species_names:
         taxid = ncbi.get_name_translator([species_name])
         species_taxids[species_name] = taxid[species_name][0] if taxid else None
-
+    
     taxa_ids = [taxid for taxid in species_taxids.values() if taxid]
     tree = ncbi.get_topology(taxa_ids)
-
+    
     def annotate_tree_with_scientific_names(tree):
         for node in tree.traverse():
             if node.is_leaf():
@@ -101,4 +128,4 @@ try:
     print("Tree with pie charts rendered successfully!")
 
 except Exception as e:
-    print("An error occurred:", e)
+   print("An error occurred:", e)
