@@ -10,6 +10,11 @@ Finally, this script will draw a tree based on the pre-defined NCBI taxonomy amo
 
 **What do you need?**
 
+>>>For NCBI Blast (DNA or protein) users, you need the description CSV table as explained here,
+
+![alt text](https://github.com/AhmedElsherbini/blastCblast_stats/blob/main/Ncbi_blast.png)
+
+>>>For Cblaster users,
 You shall have the binary file as easy as I get it like this.
 
 ```bash
